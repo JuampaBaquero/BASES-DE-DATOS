@@ -53,9 +53,61 @@ WITH GENEROXOFICINA AS(
             ON t.codigo_cliente = c.codigo_cliente
     GROUP BY c.genero, m.valor
 )
-
-SELECT 
     
+--query 3
+SELECT 
+    ci.NOMBRE || ' ' || ci.APELLIDO "CLIENTE",
+    --cuentas con 100
+    (SELECT COUNT(DISTINCT t.PORCENTAJE_TITULARIDAD)
+    FROM TITULARES t
+    WHERE t.PORCENTAJE_TITULARIDAD = 100 
+        AND
+        t.CODIGO_CLIENTE = ci.CODIGO_CLIENTE) 
+    "Numero de Cuentas con un porcentaje del 100",
+    (SELECT COUNT(DISTINCT t.PORCENTAJE_TITULARIDAD)
+    FROM TITULARES t
+    WHERE t.PORCENTAJE_TITULARIDAD != 100 
+        AND
+        t.CODIGO_CLIENTE = ci.CODIGO_CLIENTE)  "Numero de Cuentas con un porcentaje diferente al 100",
+    TO_CHAR((
+        SELECT MIN(m.FECHA_MOVIMIENTO)
+        FROM MOVIMIENTOS m
+        JOIN TITULARES t ON t.NUMERO_CUENTA = m.NUMERO_CUENTA
+        WHERE t.CODIGO_CLIENTE = ci.CODIGO_CLIENTE), 'DD/MM/YYYY HH24:MI:SS') "Fecha Primer Movimiento",--min porque en las fechas debe ser la primera, tonces el menor
+    NVL((
+        SELECT COUNT(m.NUMERO)
+        FROM MOVIMIENTOS m
+        JOIN TITULARES t ON t.NUMERO_CUENTA = m.NUMERO_CUENTA
+        WHERE t.CODIGO_CLIENTE = ci.CODIGO_CLIENTE
+    ), 0) "Cantidad Movimientos",
+    NVL((
+        SELECT SUM(m.VALOR)
+        FROM MOVIMIENTOS m
+        JOIN TITULARES t ON t.NUMERO_CUENTA = m.NUMERO_CUENTA
+        WHERE t.CODIGO_CLIENTE = ci.CODIGO_CLIENTE 
+        AND m.tipo = 'D'
+    ), 0) "Valor Movimientos Débitos de todas las cuentas",--Debito
+    NVL((
+        SELECT SUM(m.VALOR)
+        FROM MOVIMIENTOS m
+        JOIN TITULARES t ON t.NUMERO_CUENTA = m.NUMERO_CUENTA
+        WHERE t.CODIGO_CLIENTE = ci.CODIGO_CLIENTE 
+        AND m.tipo = 'C'
+    ), 0) "Valor Movimienrtos Créditos de todas las cuentas",--Credito
+    NVL((
+        SELECT SUM(m.VALOR)
+        FROM MOVIMIENTOS m
+        JOIN TITULARES t ON t.NUMERO_CUENTA = m.NUMERO_CUENTA
+        WHERE t.CODIGO_CLIENTE = ci.CODIGO_CLIENTE 
+        AND m.tipo = 'I'
+    ), 0) "Valor Movimientos Tipo Impuesto de todas las cuentas", --Impuesto
+    NVL((
+        SELECT SUM(m.VALOR)
+        FROM MOVIMIENTOS m
+        JOIN TITULARES t ON t.NUMERO_CUENTA = m.NUMERO_CUENTA
+        WHERE t.CODIGO_CLIENTE = ci.CODIGO_CLIENTE 
+        AND m.tipo = 'R'
+    ), 0) "Valor movimientos tipo rendimientos de todas las cuentas" --Rendimiento
+FROM CLIENTES ci
 
-
-
+ORDER BY ci.CODIGO_CLIENTE;
