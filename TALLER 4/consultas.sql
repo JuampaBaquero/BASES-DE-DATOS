@@ -184,7 +184,15 @@ SELECT
 FROM CLIENTES ci
 ORDER BY ci.CODIGO_CLIENTE;
 
+<<<<<<< HEAD
 --Query 4
+=======
+ORDER BY ci.CODIGO_CLIENTE;
+
+
+--Query 4
+
+>>>>>>> 3a6f9d3 (query 4)
 ALTER TABLE CUENTAS ADD saldo number(12,2);
 UPDATE CUENTAS cu
 SET cu.saldo = NVL(
@@ -200,4 +208,8 @@ SET cu.saldo = NVL(
      WHERE m.numero_cuenta = cu.numero_cuenta
      AND m.tipo IN ('I','C')
     ),0)
+<<<<<<< HEAD
     + cu.valor_apertura; 
+=======
+    + cu.valor_apertura; 
+>>>>>>> 3a6f9d3 (query 4)
