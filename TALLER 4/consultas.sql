@@ -182,5 +182,22 @@ SELECT
         AND m.tipo = 'R'
     ), 0) "Valor movimientos tipo rendimientos de todas las cuentas" --Rendimiento
 FROM CLIENTES ci
-
 ORDER BY ci.CODIGO_CLIENTE;
+
+--Query 4
+ALTER TABLE CUENTAS ADD saldo number(12,2);
+UPDATE CUENTAS cu
+SET cu.saldo = NVL(
+    (SELECT SUM(valor)
+     FROM MOVIMIENTOS m
+     WHERE m.numero_cuenta = cu.numero_cuenta
+     AND m.tipo IN ('R','D')
+    ),0)
+    -
+    NVL( 
+    (SELECT SUM(valor)
+     FROM MOVIMIENTOS m
+     WHERE m.numero_cuenta = cu.numero_cuenta
+     AND m.tipo IN ('I','C')
+    ),0)
+    + cu.valor_apertura; 
