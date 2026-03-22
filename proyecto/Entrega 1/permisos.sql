@@ -15,3 +15,12 @@ GRANT ALL ON PARTIDO        TO is331516;
 GRANT ALL ON SELECCION      TO is331516;
 
 --Mi UserName: is331501
+
+--COMANDOS ÚTILES
+
+--SINÓNIMO: Crea un nombre temporal de la tabla de mi server en su esquema 
+    CREATE SYNONYM CIUDAD FOR is331501.CIUDAD; --Y así con el resto. . .
+
+--SET SCHEMA: Copia todas las tablas de ese otro user durante esa sesión 
+    --Está como vacano xd
+    ALTER SESSION SET CURRENT_SCHEMA = is331501; 
