@@ -1,11 +1,11 @@
 -- Persona
-INSERT INTO PERSONA VALUES (1, 'Juan', 'Pérez', 'juan.perez@mail.com', 3001111111);
-INSERT INTO PERSONA VALUES (2, 'María', 'López', 'maria.lopez@mail.com', 3002222222);
-INSERT INTO PERSONA VALUES (3, 'Carlos', 'Ruiz', 'carlos.ruiz@mail.com', 3003333333);
-INSERT INTO PERSONA VALUES (4, 'Ana', 'Torres', 'ana.torres@mail.com', 3004444444);
-INSERT INTO PERSONA VALUES (5, 'Luis', 'Gómez', 'luis.gomez@mail.com', 3005555555);
-INSERT INTO PERSONA VALUES (6, 'Sofía', 'Vargas', 'sofia.vargas@mail.com', 3006666666);
-INSERT INTO PERSONA VALUES (7, 'Pedro', 'Molina', 'pedro.molina@mail.com', 3007777777);
+INSERT INTO PERSONA VALUES (1,'Juan','Perez','CC',101000001,'juan.perez@mail.com',3001111111);
+INSERT INTO PERSONA VALUES (2,'Maria','Lopez','CC',101000002,'maria.lopez@mail.com',3002222222);
+INSERT INTO PERSONA VALUES (3,'Carlos','Ruiz','CC',101000003,'carlos.ruiz@mail.com',3003333333);
+INSERT INTO PERSONA VALUES (4,'Ana','Torres','CC',101000004,'ana.torres@mail.com',3004444444);
+INSERT INTO PERSONA VALUES (5,'Luis','Gomez','CC',101000005,'luis.gomez@mail.com',3005555555);
+INSERT INTO PERSONA VALUES (6,'Sofia','Vargas','CC',101000006,'sofia.vargas@mail.com',3006666666);
+INSERT INTO PERSONA VALUES (7,'Pedro','Molina','IT',102000007,'pedro.molina@mail.com',3007777777);
 
 --Expositor
 INSERT INTO EXPOSITOR VALUES (1);
