@@ -191,8 +191,11 @@ ORDER BY ci.CODIGO_CLIENTE;
 
 
 --Query 4
+<<<<<<< HEAD
 
 >>>>>>> 3a6f9d3 (query 4)
+=======
+>>>>>>> bf08b62 (Guardo avances taller 4)
 ALTER TABLE CUENTAS ADD saldo number(12,2);
 UPDATE CUENTAS cu
 SET cu.saldo = NVL(
