@@ -1,3 +1,5 @@
+--cambio de prueba
+
 CREATE VIEW DATOS AS (
     SELECT
         P.NOMBRE_PAIS "PAÍS",

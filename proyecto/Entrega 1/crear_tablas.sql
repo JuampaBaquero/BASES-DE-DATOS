@@ -1,3 +1,5 @@
+--cambio de prueba
+
 CREATE TABLE PAIS
 (
     NOMBRE_PAIS     VARCHAR2(70) NOT NULL,
