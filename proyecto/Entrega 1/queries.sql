@@ -1,4 +1,4 @@
---cambio de prueba
+--CONSULTAS
 
 CREATE VIEW DATOS AS (
     SELECT
@@ -9,6 +9,8 @@ CREATE VIEW DATOS AS (
         PA.FASE "FASE",
         SL.ID "ID_LOCAL",
         SV.ID "ID_VISITANTE",
+        SL.NOMBRE_SELECCION "LOCAL",
+        SV.NOMBRE_SELECCION "VISITANTE",
         PA.GOLES_LOCAL "GOLES L",
         PA.GOLES_VISITANTE "GOLES V"
 
@@ -38,6 +40,8 @@ SELECT
     "ESTADIO",
     "FECHA",
     "FASE",
+    "LOCAL",
+    "VISITANTE",
     "GOLES L",
     "GOLES V"
 FROM DATOS
@@ -168,10 +172,6 @@ JOIN SELECCION s ON s.ID = l.id_loc
 GROUP BY s.NOMBRE_SELECCION
 ORDER BY SUM(l.goles) DESC;
 
-
-
-
--- TODAS LAS QUERIES, MIRA EL DOCS --
 --6: que selecciones han jugado en todas las ciudades
 SELECT S.NOMBRE_SELECCION "Selección"
 FROM SELECCION S
@@ -186,6 +186,7 @@ WHERE NOT EXISTS(
     )
 )
 ORDER BY S.NOMBRE_SELECCION;
+
 --7: Cuantos goles ha anotado cada confederacion
 
 WITH GOLES_LOCAL AS 
