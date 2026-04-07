@@ -69,6 +69,7 @@ GROUP BY C.NOMBRE_CIUDAD, E.NOMBRE_ESTADIO;
 -- 3: cuantos goles totales ha anotado cada seleccion en todo el torneo
 -- (TENER EN CUENTA GOLES LOCAL Y VISITANTE) HACERLO COMO LA TABLA
 
+
 WITH A AS
 (
     SELECT 
@@ -136,7 +137,7 @@ FROM PAIS p
 
 
 -- 5 QUERY
- -- goles totales 
+-- goles totales 
 
 SELECT 
     s.NOMBRE_SELECCION "Selección",
@@ -173,6 +174,7 @@ GROUP BY s.NOMBRE_SELECCION
 ORDER BY SUM(l.goles) DESC;
 
 --6: que selecciones han jugado en todas las ciudades
+
 SELECT S.NOMBRE_SELECCION "Selección"
 FROM SELECCION S
 WHERE NOT EXISTS(
@@ -184,7 +186,7 @@ WHERE NOT EXISTS(
         JOIN ESTADIO E ON P.ID_ESTADIO = E.ID
         WHERE E.ID_CIUDAD = C.ID AND (P.ID_SELECCION_LOCAL = S.ID OR P.ID_SELECCION_VISITANTE = S.ID)
     )
-)
+)                    
 ORDER BY S.NOMBRE_SELECCION;
 
 --7: Cuantos goles ha anotado cada confederacion
@@ -214,6 +216,7 @@ UNION ALL
 
 SELECT 'TOTALES', SUM(GOLES_LOCAL), SUM(GOLES_VISITANTE), SUM(GOLES_LOCAL+GOLES_VISITANTE)
 FROM PARTIDO;
+
 --8: Realice al tabla exacta del DOCS :)
 --esta querie es exactamente a la anterior, ya envié correo al profesor a ver si soluciona la duda, o si al replicar se refiere a los inserts
 WITH GOLES_LOCAL AS 
@@ -232,12 +235,14 @@ GOLES_VISITANTE AS
 )
 
 
-SELECT C.NOMBRE_CONFEDERACION "Confederación", GL.SUMA_LOCAL "Goles como local", GV.SUMA_VISITANTE "Goles como visitante", GL.SUMA_LOCAL + GV.SUMA_VISITANTE "Total"
+SELECT C.NOMBRE_CONFEDERACION "Confederación", TO_CHAR(GL.SUMA_LOCAL) "Goles como local", TO_CHAR(GV.SUMA_VISITANTE) "Goles como visitante", TO_CHAR(GL.SUMA_LOCAL + GV.SUMA_VISITANTE) "Total"
 FROM CONFEDERACION C
 JOIN GOLES_LOCAL GL ON GL.ID_CONFEDERACION = C.ID
 JOIN GOLES_VISITANTE GV ON GV.ID_CONFEDERACION = C.ID
+UNION ALL
+    SELECT '...', '...', '...', '...'
+    FROM DUAL
 
 UNION ALL
-
-SELECT 'TOTALES', SUM(GOLES_LOCAL), SUM(GOLES_VISITANTE), SUM(GOLES_LOCAL+GOLES_VISITANTE)
-FROM PARTIDO;
+SELECT 'TOTALES', TO_CHAR(SUM(GOLES_LOCAL)), TO_CHAR(SUM(GOLES_VISITANTE)), TO_CHAR(SUM(GOLES_LOCAL+GOLES_VISITANTE))
+FROM PARTIDO;   
