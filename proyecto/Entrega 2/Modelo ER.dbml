@@ -1,0 +1,156 @@
+// cambio de prueba
+
+Table PAIS {
+  NOMBRE_PAIS VARCHAR2(70) [not null]
+  ID NUMBER(10,0) [pk, increment]
+  IVA NUMBER(0, 4) [not null]
+
+  indexes {
+    (NOMBRE_PAIS) [unique, name: "UQ_NOMBRE_PAIS"]
+  }
+}
+
+Table CIUDAD {
+  NOMBRE_CIUDAD VARCHAR2(70) [not null]
+  ID_PAIS NUMBER(10,0) [not null, default: 0, ref: > PAIS.ID]
+  ID NUMBER(10,0) [pk, increment]
+  impuesto_local NUMBER(0, 4) [not null]
+
+  indexes {
+    (NOMBRE_CIUDAD) [unique, name: "UQ_NOMBRE_CIUDAD"]
+  }
+
+  Note: '''
+    CHK_ID_PAIS: ID_PAIS >= 0
+  '''
+}
+
+Table CONFEDERACION {
+  NOMBRE_CONFEDERACION VARCHAR2(70) [not null]
+  ID NUMBER(10,0) [pk, increment]
+
+  indexes {
+    (NOMBRE_CONFEDERACION) [unique, name: "UQ_NOMBRE_CONFEDERACION"]
+  }
+}
+
+Table ESTADIO {
+  NOMBRE_ESTADIO VARCHAR2(70) [not null]
+  CAPACIDAD INTEGER [not null, default: 0]
+  ID_CIUDAD NUMBER(10,0) [not null, default: 0, ref: > CIUDAD.ID]
+  ID NUMBER(10,0) [pk, increment]
+
+  indexes {
+    (NOMBRE_ESTADIO) [unique, name: "UQ_NOMBRE_ESTADIO"]
+  }
+
+  Note: '''
+    CHK_CAPACIDAD: CAPACIDAD >= 0
+    CHK_ID_CIUDAD: ID_CIUDAD >= 0
+  '''
+}
+
+Table SELECCION {
+  NOMBRE_SELECCION VARCHAR2(70) [not null]
+  ID_CONFEDERACION NUMBER(10,0) [not null, default: 0, ref: > CONFEDERACION.ID]
+  ID NUMBER(10,0) [pk, increment]
+
+  indexes {
+    (NOMBRE_SELECCION) [unique, name: "UQ_NOMBRE_SELECCION"]
+  }
+
+  Note: '''
+    CHK_ID_CONFEDERACION: ID_CONFEDERACION >= 0
+  '''
+}
+
+Table PARTIDO {
+  ID_ESTADIO NUMBER(10,0) [not null, default: 0, ref: > ESTADIO.ID]
+  FECHA DATE [not null, default: `SYSDATE`]
+  FASE VARCHAR2(10) [not null]
+  ID_SELECCION_LOCAL NUMBER(10,0) [not null, default: 0, ref: > SELECCION.ID]
+  ID_SELECCION_VISITANTE NUMBER(10,0) [not null, default: 0, ref: > SELECCION.ID]
+  GOLES_LOCAL INTEGER [not null, default: 0]
+  GOLES_VISITANTE INTEGER [not null, default: 0]
+  ID NUMBER(10,0) [pk, increment]
+
+  Note: '''
+    CHK_ID_ESTADIO: ID_ESTADIO >= 0
+    CHK_ID_SEL_LOCAL: ID_SELECCION_LOCAL >= 0
+    CHK_ID_SEL_VIS: ID_SELECCION_VISITANTE >= 0
+    CHK_GOLES_LOCAL: GOLES_LOCAL >= 0
+    CHK_GOLES_VIS: GOLES_VISITANTE >= 0
+    CHK_FASE: FASE IN ('GRUPOS', 'OCTAVOS', 'CUARTOS', 'SEMIFINAL', 'FINAL')
+    CHK_JUGAR_SI_MISMA: ID_SELECCION_LOCAL != ID_SELECCION_VISITANTE
+  '''
+}
+
+
+//ENTREGA 2...
+
+Table Experiencia{
+  id_experiencia NUMBER(10, 0) [pk, increment]
+  id_partido NUMBER(10, 0) [ref: > PARTIDO.ID, not null]
+  cupos_disponibles integer
+  descripcion VARCHAR2(1000)
+  estado VARCHAR2(15)
+  precio_base NUMBER(12, 4)
+  id_guia NUMBER(10, 0) [ref: > Guia.n_documento, not null]
+  precio_total NUMBER(12, 4) [default: 0.0]
+
+  indexes
+  {
+    (id_partido) [unique, name: "UQ_ESTADO"]
+  }
+
+  Note: 
+  '''
+    CHK_ESTADO: estado IN ('disponible', 'agotada', 'cancelada')
+  '''
+}
+
+Table Guia{
+  n_documento NUMBER(10, 0) [pk, increment]
+  nombre VARCHAR2(20)
+  nivel VARCHAR2(10)
+  guia_jefe NUMBER(10, 0) [ref: > Guia.n_documento]
+  
+  Note:
+  '''
+    CHK_NIVEL: nivel IN ('basico', 'intermedio', 'experto')
+  '''
+}
+
+Table ServicioXExperiencia{
+  id_servicio NUMBER(10, 0) [pk, ref: > Servicio.id_servicio]
+  id_experiencia NUMBER(10, 0) [pk, ref: > Experiencia.id_experiencia]
+  cantidad integer
+}
+
+Table Servicio{
+  id_servicio NUMBER(10, 0) [pk, increment]
+  nombre VARCHAR2(50)
+  descripcion VARCHAR2(1000)
+  costo_adicional NUMBER(12, 4)
+  id_impuesto NUMBER(10, 0) [ref: > Impuesto.id_impuesto]
+}
+
+Table Impuesto{
+  id_impuesto NUMBER(10, 0) [pk]
+  valor NUMBER(0, 4)
+  tipo_impuesto VARCHAR2(20)
+}
+
+
+Table Cliente{
+  nombre VARCHAR2(30)
+  tipo_documento VARCHAR2(2)
+  n_documento NUMBER(10, 0) [pk, increment]
+  numero_telefono NUMBER(10, 0)
+  email VARCHAR2(50)  
+}
+
+Table ClienteXExperiencia{
+  id_experiencia NUMBER(10, 0) [pk, ref: > Experiencia.id_experiencia]
+  id_cliente NUMBER(10, 0) [pk, ref: > Cliente.n_documento]
+}
