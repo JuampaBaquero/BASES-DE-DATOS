@@ -1,3 +1,5 @@
+//Esto es para que tenga lo del .env
+import io.github.cdimascio.dotenv.Dotenv;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,11 +10,13 @@ public class Conexion
 {
     public void consultarClientes(String genero, int edadMin)
     {
+        System.out.println("Intentando conectar. . .");
+        Dotenv dotenv = Dotenv.load();
         StringBuilder SQL = new StringBuilder("SELECT nombre");
         //StringBuilder me ayuda a concatenar strings
-        SQL.append("FROM clientes AS c");
-        SQL.append("WHERE c.cedula = ?");
-        SQL.append("AND c.edad > ?");
+        SQL.append(" FROM cliente c");
+        SQL.append(" WHERE c.genero = ?");
+        SQL.append(" AND c.edad >= ?");
         
         /*
         También se puede hacer con triple comilla
@@ -24,17 +28,22 @@ public class Conexion
         */
         try(
             Connection conector = DriverManager.getConnection(
-                Constantes.RUTA_CONEXION,
-                Constantes.USERNAME,
-                Constantes.PASSWORD
+                //USAR UN .ENV
+                dotenv.get("DB_PATH"),
+                dotenv.get("DB_USUARIO"),
+                dotenv.get("DB_CONTRASENA")
             );
             PreparedStatement ps = conector.prepareStatement(SQL.toString());
-            ResultSet rs = ps.executeQuery();
         ){
-            while(rs.next())
+            ps.setString(1, genero);
+            ps.setInt(2, edadMin);
+            try(ResultSet rs = ps.executeQuery();)
             {
-                System.out.println("Nombre: " + rs.getString("nombre"));
-                //Acá depende lo que uses, por ejemplo double getBigDecimal()
+                while(rs.next())
+                {
+                    System.out.println("Nombre: " + rs.getString("nombre"));
+                    //Acá depende lo que uses, por ejemplo double getBigDecimal()
+                }
             }
         }
         catch(SQLException e){

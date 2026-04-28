@@ -1,4 +1,0 @@
-CREATE TABLE CLIENTE(
-    nombre VARCHAR2(50),
-    
-)
