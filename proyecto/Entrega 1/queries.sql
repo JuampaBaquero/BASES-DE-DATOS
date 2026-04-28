@@ -150,7 +150,7 @@ SELECT
         ROUND(
             SUM(l.goles) * 100 / 
                 (
-                    SELECT SUM(GOLES_VISITANTE + GOLES_VISITANTE)
+                    SELECT SUM(GOLES_VISITANTE + GOLES_LOCAL)
                     FROM PARTIDO
                 ), 2
         )
@@ -246,3 +246,24 @@ UNION ALL
 UNION ALL
 SELECT 'TOTALES', TO_CHAR(SUM(GOLES_LOCAL)), TO_CHAR(SUM(GOLES_VISITANTE)), TO_CHAR(SUM(GOLES_LOCAL+GOLES_VISITANTE))
 FROM PARTIDO;   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

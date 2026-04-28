@@ -1,0 +1,49 @@
+DROP TABLE AUDITORIA CASCADE CONSTRAINTS;
+CREATE TABLE AUDITORIA(
+    ID NUMBER GENERATED ALWAYS AS IDENTITY NOT NULL,
+    IP varchar2(45),
+    usuario VARCHAR2(20),
+    FECHA DATE DEFAULT SYSDATE,
+    OPERACION VARCHAR2(20),
+    ANTES VARCHAR2(50),
+    DESPUES VARCHAR2(50),
+    PRIMARY KEY (ID)
+    );
+
+CREATE OR REPLACE TRIGGER NTRIGGER
+BEFORE INSERT OR UPDATE OR DELETE ON BOOKS
+FOR EACH ROW
+DECLARE 
+    v_op VARCHAR2(20);
+BEGIN
+    IF INSERTING THEN v_op := 'INSERT';
+    ELSIF UPDATING THEN v_op := 'UPDATE';
+    ELSIF DELETING THEN v_op := 'DELETE';
+    END IF;
+    INSERT INTO AUDITORIA(
+        IP,
+        usuario,
+        FECHA,
+        OPERACION,
+        ANTES,
+        DESPUES
+    )
+    VALUES(
+        sys_context('userenv', 'ip_address'),
+        sys_context('userenv', 'current_user'),
+        sysdate,
+        v_op,
+        :old.AUTHOR_FIRST_NAME,
+        :new.AUTHOR_FIRST_NAME
+    );
+END;
+/
+
+GRANT ALL ON BOOKS TO is331516;
+
+SELECT * FROM BOOKS;
+
+SELECT * FROM AUDITORIA;
+
+
+UPDATE BOOKS SET AUTHOR_FIRST_NAME = 'Elpepe';
