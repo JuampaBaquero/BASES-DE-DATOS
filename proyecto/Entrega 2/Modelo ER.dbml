@@ -141,7 +141,6 @@ Table Impuesto{
   tipo_impuesto VARCHAR2(20)
 }
 
-
 Table Cliente{
   nombre VARCHAR2(30)
   tipo_documento VARCHAR2(2)
