@@ -1,0 +1,42 @@
+CREATE TABLE producto(
+    codigo NUMBER,
+    precio NUMBER,
+    PRIMARY KEY(codigo)
+);
+
+INSERT INTO producto VALUES (1, 15.99);
+INSERT INTO producto VALUES (2, 8.50);
+INSERT INTO producto VALUES (3, 120.00);
+INSERT INTO producto VALUES (4, 45.75);
+INSERT INTO producto VALUES (5, 3.25);
+INSERT INTO producto VALUES (6, 89.99);
+INSERT INTO producto VALUES (7, 200.00);
+INSERT INTO producto VALUES (8, 12.40);
+INSERT INTO producto VALUES (9, 67.30);
+INSERT INTO producto VALUES (10, 5.00);
+
+COMMIT;
+
+CREATE OR REPLACE FUNCTION CALCULAR_PROMEDIO(
+    p_codigo NUMBER
+)
+RETURN NVARCHAR2 AS
+v_valor NUMBER;
+BEGIN
+    SELECT precio
+    into v_valor
+    FROM producto;
+    
+    RETURN TO_CHAR(v_valor);
+
+EXCEPTION
+
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error inesperado: ' || SQLERRM);
+        RETURN 'ERROR: NO SE PUDO HACER LA QUERY UWU';
+END CALCULAR_PROMEDIO;
+/
+
+SELECT CALCULAR_PROMEDIO(1)
+FROM DUAL;
+
