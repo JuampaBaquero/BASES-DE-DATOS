@@ -1,36 +1,28 @@
-CREATE OR REPLACE FUNCTION PRECIO_TOTAL(
-    id_busqueda NUMBER
-) 
+CREATE OR REPLACE FUNCTION PRECIO_TOTAL(id_busqueda NUMBER)
 RETURN NUMBER AS
-    interes_local NUMBER;
-    impuestos_servicios NUMBER;
     base_precio NUMBER;
-
-BEGIN 
-    
+    total_servicios NUMBER := 0;
+BEGIN
+    -- Precio base de la experiencia
     SELECT precio_base
     INTO base_precio
-    FROM EXPERIENCIA e
-    WHERE id_experiencia = id_busqueda; 
+    FROM experiencia
+    WHERE id_experiencia = id_busqueda;
 
-    --Para actualizar el impuesto por paíz
-    SELECT base_precio * ( 1 + SUM(pa.iva) + SUM(c.impuesto_local) ) 
-    INTO interes_local
-    FROM pais pa 
-    INNER JOIN ciudad ci ON ci.id_pais = pa.id_pais
-    INNER JOIN estadio e ON e.id_ciudad = ci.id_ciudad
-    INNER JOIN partido p ON p.id_estadio = e.id_estadio
-    WHERE p.id_experiencia = id_busqueda;
+    --Precio total de los servicios
+    SELECT SUM(subtotal)
+    INTO total_servicios
+    FROM (
+        SELECT sxi.cantidad * s.costo_adicional * (1 + SUM(i.valor)) subtotal
+        FROM serviciosxinscripcion sxi
+        INNER JOIN servicio s ON s.id_servicio   = sxi.id_servicio
+        INNER JOIN impuestoxservicio ixs ON ixs.id_servicio = s.id_servicio
+        INNER JOIN impuesto i ON i.id_impuesto   = ixs.id_impuesto
+        WHERE sxi.id_experiencia = id_busqueda
+        GROUP BY sxi.id_servicio, sxi.cantidad, s.costo_adicional
+    );
 
-    --Para actualizar el impuesto por los servicios
-    SELECT SUM(s.costo_adicional * sxi.cantidad * i.valor) 
-    INTO interes_servicio
-    FROM impuesto i
-    INNER JOIN servicio s ON s.id_impuesto = i.id_impuesto
-    INNER JOIN ServicioXExperiencia sxi ON sxi.id_servicio = s.id_servicio
-    WHERE sxi.id_experiencia = id_busqueda;
-    
-    RETURN interes_local + interes_servicio;
+    RETURN base_precio + total_servicios;
 
 END PRECIO_TOTAL;
 /

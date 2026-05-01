@@ -1,162 +1,224 @@
-CREATE TABLE "PAIS" (
-  "NOMBRE_PAIS" VARCHAR2(70) NOT NULL,
-  "id_pais" NUMBER(10,0) GENERATED AS IDENTITY PRIMARY KEY,
-  "IVA" NUMBER(0,4) NOT NULL
+DROP TABLE pais CASCADE CONSTRAINTS;
+DROP TABLE ciudad CASCADE CONSTRAINTS;
+DROP TABLE confederacion CASCADE CONSTRAINTS;
+DROP TABLE estadio CASCADE CONSTRAINTS;
+DROP TABLE seleccion CASCADE CONSTRAINTS;
+DROP TABLE partido CASCADE CONSTRAINTS;
+DROP TABLE experiencia CASCADE CONSTRAINTS;
+DROP TABLE guia CASCADE CONSTRAINTS;
+DROP TABLE nivel CASCADE CONSTRAINTS;
+DROP TABLE servicio CASCADE CONSTRAINTS;
+DROP TABLE impuestoxservicio CASCADE CONSTRAINTS;
+DROP TABLE impuesto CASCADE CONSTRAINTS;
+DROP TABLE inscripcion CASCADE CONSTRAINTS;
+DROP TABLE pagos CASCADE CONSTRAINTS;
+DROP TABLE transaccion CASCADE CONSTRAINTS;
+DROP TABLE cliente CASCADE CONSTRAINTS;
+DROP TABLE serviciosxinscripcion CASCADE CONSTRAINTS;
+
+CREATE TABLE pais (
+  nombre_pais VARCHAR2(70) NOT NULL,
+  id_pais NUMBER(10,0) GENERATED AS IDENTITY PRIMARY KEY
 );
 
-CREATE TABLE "CIUDAD" (
-  "NOMBRE_CIUDAD" VARCHAR2(70) NOT NULL,
-  "ID_PAIS" NUMBER(10,0) DEFAULT 0 NOT NULL,
-  "id_ciudad" NUMBER(10,0) GENERATED AS IDENTITY PRIMARY KEY,
-  "impuesto_local" NUMBER(0,4) NOT NULL
+CREATE TABLE ciudad (
+  nombre_ciudad VARCHAR2(70) NOT NULL,
+  id_pais NUMBER(10,0) DEFAULT 0 NOT NULL,
+  id_ciudad NUMBER(10,0) GENERATED AS IDENTITY PRIMARY KEY
 );
 
-CREATE TABLE "CONFEDERACION" (
-  "NOMBRE_CONFEDERACION" VARCHAR2(70) NOT NULL,
-  "id_confederacion" NUMBER(10,0) GENERATED AS IDENTITY PRIMARY KEY
+CREATE TABLE confederacion (
+  nombre_confederacion VARCHAR2(70) NOT NULL,
+  id_confederacion NUMBER(10,0) GENERATED AS IDENTITY PRIMARY KEY
 );
 
-CREATE TABLE "ESTADIO" (
-  "NOMBRE_ESTADIO" VARCHAR2(70) NOT NULL,
-  "CAPACIDAD" INTEGER DEFAULT 0 NOT NULL,
-  "ID_CIUDAD" NUMBER(10,0) DEFAULT 0 NOT NULL,
-  "id_estadio" NUMBER(10,0) GENERATED AS IDENTITY PRIMARY KEY
+CREATE TABLE estadio (
+  nombre_estadio VARCHAR2(70) NOT NULL,
+  capacidad INTEGER DEFAULT 0 NOT NULL,
+  id_ciudad NUMBER(10,0) DEFAULT 0 NOT NULL,
+  id_estadio NUMBER(10,0) GENERATED AS IDENTITY PRIMARY KEY
 );
 
-CREATE TABLE "SELECCION" (
-  "NOMBRE_SELECCION" VARCHAR2(70) NOT NULL,
-  "ID_CONFEDERACION" NUMBER(10,0) DEFAULT 0 NOT NULL,
-  "id_seleccion" NUMBER(10,0) GENERATED AS IDENTITY PRIMARY KEY
+CREATE TABLE seleccion (
+  nombre_seleccion VARCHAR2(70) NOT NULL,
+  id_confederacion NUMBER(10,0) DEFAULT 0 NOT NULL,
+  id_seleccion NUMBER(10,0) GENERATED AS IDENTITY PRIMARY KEY
 );
 
-CREATE TABLE "PARTIDO" (
-  "ID_ESTADIO" NUMBER(10,0) DEFAULT 0 NOT NULL,
-  "FECHA" TIMESTAMP DEFAULT SYSDATE NOT NULL,
-  "FASE" VARCHAR2(10) NOT NULL,
-  "ID_SELECCION_LOCAL" NUMBER(10,0) DEFAULT 0 NOT NULL,
-  "ID_SELECCION_VISITANTE" NUMBER(10,0) DEFAULT 0 NOT NULL,
-  "GOLES_LOCAL" INTEGER DEFAULT 0 NOT NULL,
-  "GOLES_VISITANTE" INTEGER DEFAULT 0 NOT NULL,
-  "id_partido" NUMBER(10,0) GENERATED AS IDENTITY PRIMARY KEY,
-  "id_experiencia" NUMBER(10,0)
+CREATE TABLE partido (
+  id_estadio NUMBER(10,0) DEFAULT 0 NOT NULL,
+  fecha TIMESTAMP DEFAULT SYSDATE NOT NULL,
+  fase VARCHAR2(10) NOT NULL,
+  id_seleccion_local NUMBER(10,0) DEFAULT 0 NOT NULL,
+  id_seleccion_visitante NUMBER(10,0) DEFAULT 0 NOT NULL,
+  goles_local INTEGER DEFAULT 0 NOT NULL,
+  goles_visitante INTEGER DEFAULT 0 NOT NULL,
+  id_partido NUMBER(10,0) GENERATED AS IDENTITY PRIMARY KEY,
+  id_experiencia NUMBER(10,0)
 );
 
-CREATE TABLE "Experiencia" (
-  "id_experiencia" NUMBER(10,0) GENERATED AS IDENTITY PRIMARY KEY,
-  "cupos_disponibles" integer,
-  "descripcion" VARCHAR2(1000),
-  "estado" VARCHAR2(15),
-  "precio_base" NUMBER(12,4),
-  "id_guia" NUMBER(10,0) NOT NULL,
-  "precio_total" NUMBER(12,4) DEFAULT 0
+CREATE TABLE experiencia (
+  id_experiencia NUMBER(10,0) GENERATED AS IDENTITY PRIMARY KEY,
+  cupos integer,
+  descripcion VARCHAR2(1000),
+  estado VARCHAR2(15),
+  precio_base NUMBER(12,4),
+  id_guia NUMBER(10,0) NOT NULL,
+  precio_total NUMBER(12,4) DEFAULT 0,
+  horas_trabajadas INTEGER
 );
 
-CREATE TABLE "Guia" (
-  "id_guia" NUMBER(10,0) GENERATED AS IDENTITY PRIMARY KEY,
-  "nombre" VARCHAR2(20),
-  "guia_jefe" NUMBER(10,0),
-  "id_nivel" VARCHAR2(10)
+CREATE TABLE guia (
+  id_guia NUMBER(10,0) GENERATED AS IDENTITY PRIMARY KEY,
+  nombre VARCHAR2(20),
+  guia_jefe NUMBER(10,0),
+  id_nivel VARCHAR2(10)
 );
 
-CREATE TABLE "Nivel" (
-  "id_nivel" VARCHAR2(10) PRIMARY KEY,
-  "valorxhora" NUMBER(10,2)
+CREATE TABLE nivel (
+  id_nivel VARCHAR2(10) PRIMARY KEY,
+  valorxhora NUMBER(10,2)
 );
 
-CREATE TABLE "ServicioXExperiencia" (
-  "id_servicio" NUMBER(10,0),
-  "id_experiencia" NUMBER(10,0),
-  "cantidad" integer,
-  PRIMARY KEY ("id_servicio", "id_experiencia")
+CREATE TABLE serviciosxinscripcion (
+  id_servicio NUMBER(10,0),
+  id_experiencia NUMBER(10,0),
+  cantidad integer,
+  PRIMARY KEY (id_servicio, id_experiencia)
 );
 
-CREATE TABLE "Servicio" (
-  "id_servicio" NUMBER(10,0) GENERATED AS IDENTITY PRIMARY KEY,
-  "nombre" VARCHAR2(50),
-  "descripcion" VARCHAR2(1000),
-  "costo_adicional" NUMBER(12,4),
-  "id_impuesto" NUMBER(10,0)
+CREATE TABLE servicio (
+  id_servicio NUMBER(10,0) GENERATED AS IDENTITY PRIMARY KEY,
+  nombre VARCHAR2(50),
+  descripcion VARCHAR2(1000),
+  costo_adicional NUMBER(12,4)
 );
 
-CREATE TABLE "Impuesto" (
-  "id_impuesto" NUMBER(10,0) PRIMARY KEY,
-  "valor" NUMBER(0,4),
-  "tipo_impuesto" VARCHAR2(20)
+CREATE TABLE impuesto (
+  id_impuesto NUMBER(10,0) PRIMARY KEY,
+  valor NUMBER(1,4),
+  tipo_impuesto VARCHAR2(20)
 );
 
-CREATE TABLE "Cliente" (
-  "nombre" VARCHAR2(30),
-  "apellido" VARCHAR2(30),
-  "tipo_documento" VARCHAR2(2),
-  "id_cliente" NUMBER(10,0) GENERATED AS IDENTITY PRIMARY KEY,
-  "numero_telefono" NUMBER(10,0),
-  "email" VARCHAR2(50)
+CREATE TABLE impuestoxservicio (
+  id_impuesto NUMBER(10,0),
+  id_servicio NUMBER(10,0),
+  PRIMARY KEY (id_impuesto, id_servicio)
 );
 
-CREATE TABLE "ClienteXExperiencia" (
-  "id_experiencia" NUMBER(10,0),
-  "id_cliente" NUMBER(10,0),
-  PRIMARY KEY ("id_experiencia", "id_cliente")
+CREATE TABLE cliente (
+  nombre VARCHAR2(30),
+  apellido VARCHAR2(30),
+  tipo_documento VARCHAR2(2),
+  id_cliente NUMBER(10,0) GENERATED AS IDENTITY PRIMARY KEY,
+  numero_telefono NUMBER(10,0),
+  email VARCHAR2(50)
 );
 
-CREATE UNIQUE INDEX "UQ_NOMBRE_PAIS" ON "PAIS" ("NOMBRE_PAIS");
+CREATE TABLE transaccion (
+  id_transaccion NUMBER(10,0) PRIMARY KEY,
+  valor NUMBER(12,4),
+  tipo_pago VARCHAR2(50),
+  referencia NUMBER(10,0),
+  fecha_pago TIMESTAMP
+);
 
-CREATE UNIQUE INDEX "UQ_NOMBRE_CIUDAD" ON "CIUDAD" ("NOMBRE_CIUDAD");
+CREATE TABLE inscripcion (
+  id_experiencia NUMBER(10,0),
+  id_cliente NUMBER(10,0),
+  PRIMARY KEY (id_experiencia, id_cliente)
+);
 
-CREATE UNIQUE INDEX "UQ_NOMBRE_CONFEDERACION" ON "CONFEDERACION" ("NOMBRE_CONFEDERACION");
+CREATE TABLE pagos (
+  id_cliente NUMBER(10,0),
+  id_experiencia NUMBER(10,0),
+  id_transaccion NUMBER(10,0),
+  PRIMARY KEY (id_cliente, id_experiencia, id_transaccion)
+);
 
-CREATE UNIQUE INDEX "UQ_NOMBRE_ESTADIO" ON "ESTADIO" ("NOMBRE_ESTADIO");
+ALTER TABLE ciudad ADD FOREIGN KEY (id_pais) REFERENCES pais (id_pais) DEFERRABLE INITIALLY IMMEDIATE;
 
-CREATE UNIQUE INDEX "UQ_NOMBRE_SELECCION" ON "SELECCION" ("NOMBRE_SELECCION");
+ALTER TABLE estadio ADD FOREIGN KEY (id_ciudad) REFERENCES ciudad (id_ciudad) DEFERRABLE INITIALLY IMMEDIATE;
 
-COMMENT ON TABLE "CIUDAD" IS 'CHK_ID_PAIS: ID_PAIS >= 0
-';
+ALTER TABLE seleccion ADD FOREIGN KEY (id_confederacion) REFERENCES confederacion (id_confederacion) DEFERRABLE INITIALLY IMMEDIATE;
 
-COMMENT ON TABLE "ESTADIO" IS 'CHK_CAPACIDAD: CAPACIDAD >= 0
-CHK_ID_CIUDAD: ID_CIUDAD >= 0
-';
+ALTER TABLE partido ADD FOREIGN KEY (id_estadio) REFERENCES estadio (id_estadio) DEFERRABLE INITIALLY IMMEDIATE;
 
-COMMENT ON TABLE "SELECCION" IS 'CHK_ID_CONFEDERACION: ID_CONFEDERACION >= 0
-';
+ALTER TABLE partido ADD FOREIGN KEY (id_seleccion_local) REFERENCES seleccion (id_seleccion) DEFERRABLE INITIALLY IMMEDIATE;
 
-COMMENT ON TABLE "PARTIDO" IS 'CHK_ID_ESTADIO: ID_ESTADIO >= 0
-CHK_ID_SEL_LOCAL: ID_SELECCION_LOCAL >= 0
-CHK_ID_SEL_VIS: ID_SELECCION_VISITANTE >= 0
-CHK_GOLES_LOCAL: GOLES_LOCAL >= 0
-CHK_GOLES_VIS: GOLES_VISITANTE >= 0
-CHK_FASE: FASE IN (''GRUPOS'', ''OCTAVOS'', ''CUARTOS'', ''SEMIFINAL'', ''FINAL'')
-CHK_JUGAR_SI_MISMA: ID_SELECCION_LOCAL != ID_SELECCION_VISITANTE
-';
+ALTER TABLE partido ADD FOREIGN KEY (id_seleccion_visitante) REFERENCES seleccion (id_seleccion) DEFERRABLE INITIALLY IMMEDIATE;
 
-COMMENT ON TABLE "Experiencia" IS 'CHK_ESTADO: estado IN (''disponible'', ''agotada'', ''cancelada'')
-';
+ALTER TABLE partido ADD FOREIGN KEY (id_experiencia) REFERENCES experiencia (id_experiencia) DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "CIUDAD" ADD FOREIGN KEY ("ID_PAIS") REFERENCES "PAIS" ("id_pais") DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE experiencia ADD FOREIGN KEY (id_guia) REFERENCES guia (id_guia) DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "ESTADIO" ADD FOREIGN KEY ("ID_CIUDAD") REFERENCES "CIUDAD" ("id_ciudad") DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE guia ADD FOREIGN KEY (guia_jefe) REFERENCES guia (id_guia) DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "SELECCION" ADD FOREIGN KEY ("ID_CONFEDERACION") REFERENCES "CONFEDERACION" ("id_confederacion") DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE guia ADD FOREIGN KEY (id_nivel) REFERENCES nivel (id_nivel) DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "PARTIDO" ADD FOREIGN KEY ("ID_ESTADIO") REFERENCES "ESTADIO" ("id_estadio") DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE serviciosxinscripcion ADD FOREIGN KEY (id_servicio) REFERENCES servicio (id_servicio) DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "PARTIDO" ADD FOREIGN KEY ("ID_SELECCION_LOCAL") REFERENCES "SELECCION" ("id_seleccion") DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE serviciosxinscripcion ADD FOREIGN KEY (id_experiencia) REFERENCES experiencia (id_experiencia) DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "PARTIDO" ADD FOREIGN KEY ("ID_SELECCION_VISITANTE") REFERENCES "SELECCION" ("id_seleccion") DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE impuestoxservicio ADD FOREIGN KEY (id_impuesto) REFERENCES impuesto (id_impuesto) DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "PARTIDO" ADD FOREIGN KEY ("id_experiencia") REFERENCES "Experiencia" ("id_experiencia") DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE impuestoxservicio ADD FOREIGN KEY (id_servicio) REFERENCES servicio (id_servicio) DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "Experiencia" ADD FOREIGN KEY ("id_guia") REFERENCES "Guia" ("id_guia") DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE inscripcion ADD FOREIGN KEY (id_experiencia) REFERENCES experiencia (id_experiencia) DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "Guia" ADD FOREIGN KEY ("guia_jefe") REFERENCES "Guia" ("id_guia") DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE inscripcion ADD FOREIGN KEY (id_cliente) REFERENCES cliente (id_cliente) DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "Guia" ADD FOREIGN KEY ("id_nivel") REFERENCES "Nivel" ("id_nivel") DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE pagos ADD FOREIGN KEY (id_cliente, id_experiencia) REFERENCES inscripcion (id_cliente, id_experiencia) DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "ServicioXExperiencia" ADD FOREIGN KEY ("id_servicio") REFERENCES "Servicio" ("id_servicio") DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE pagos ADD FOREIGN KEY (id_transaccion) REFERENCES transaccion (id_transaccion) DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "ServicioXExperiencia" ADD FOREIGN KEY ("id_experiencia") REFERENCES "Experiencia" ("id_experiencia") DEFERRABLE INITIALLY IMMEDIATE;
+--Constraints para unique
+ALTER TABLE pais ADD CONSTRAINT uq_nombre_pais UNIQUE (nombre_pais);
+ALTER TABLE ciudad ADD CONSTRAINT uq_nombre_ciudad UNIQUE (nombre_ciudad);
+ALTER TABLE confederacion ADD CONSTRAINT uq_nombre_confederacion UNIQUE (nombre_confederacion);
+ALTER TABLE estadio ADD CONSTRAINT uq_nombre_estadio UNIQUE (nombre_estadio);
+ALTER TABLE seleccion ADD CONSTRAINT uq_nombre_seleccion UNIQUE (nombre_seleccion);
+ALTER TABLE transaccion ADD CONSTRAINT uq_referencia UNIQUE (referencia);
 
-ALTER TABLE "Servicio" ADD FOREIGN KEY ("id_impuesto") REFERENCES "Impuesto" ("id_impuesto") DEFERRABLE INITIALLY IMMEDIATE;
+--Constraints para check
+ALTER TABLE ciudad ADD CONSTRAINT chk_id_pais CHECK (id_pais >= 0);
+ALTER TABLE estadio ADD CONSTRAINT chk_capacidad CHECK (capacidad >= 0);
+ALTER TABLE estadio ADD CONSTRAINT chk_id_ciudad CHECK (id_ciudad >= 0);
+ALTER TABLE seleccion ADD CONSTRAINT chk_id_confederacion CHECK (id_confederacion >= 0);
+ALTER TABLE experiencia ADD CONSTRAINT chk_estado CHECK (estado IN ('disponible', 'agotada', 'cancelada'));
+ALTER TABLE impuesto ADD CONSTRAINT chk_tipo CHECK (tipo_impuesto IN ('IVA', 'TURISTICO', 'LOCAL', 'OTRO')); 
 
-ALTER TABLE "ClienteXExperiencia" ADD FOREIGN KEY ("id_experiencia") REFERENCES "Experiencia" ("id_experiencia") DEFERRABLE INITIALLY IMMEDIATE;
+-- partido
+ALTER TABLE partido ADD CONSTRAINT chk_id_estadio CHECK (id_estadio >= 0);
+ALTER TABLE partido ADD CONSTRAINT chk_id_sel_local CHECK (id_seleccion_local >= 0);
+ALTER TABLE partido ADD CONSTRAINT chk_id_sel_vis CHECK (id_seleccion_visitante >= 0);
+ALTER TABLE partido ADD CONSTRAINT chk_goles_local CHECK (goles_local >= 0);
+ALTER TABLE partido ADD CONSTRAINT chk_goles_vis CHECK (goles_visitante >= 0);
+ALTER TABLE partido ADD CONSTRAINT chk_fase CHECK (fase IN ('GRUPOS', 'OCTAVOS', 'CUARTOS', 'SEMIFINAL', 'FINAL'));
+ALTER TABLE partido ADD CONSTRAINT chk_jugar CHECK (id_seleccion_local != id_seleccion_visitante);
 
-ALTER TABLE "ClienteXExperiencia" ADD FOREIGN KEY ("id_cliente") REFERENCES "Cliente" ("id_cliente") DEFERRABLE INITIALLY IMMEDIATE;
+--Trigger para mirar si un cliente se va a meter en una experiencia sin cupos
+
+CREATE OR REPLACE TRIGGER LIMITE_CUPOS
+BEFORE INSERT ON inscripcion
+FOR EACH ROW
+DECLARE
+    cupos_experiencia       NUMBER;
+    inscripciones_experiencia NUMBER;
+BEGIN
+    SELECT cupos
+    INTO cupos_experiencia
+    FROM experiencia
+    WHERE id_experiencia = :NEW.id_experiencia;
+
+    SELECT COUNT(*)
+    INTO inscripciones_experiencia
+    FROM inscripcion
+    WHERE id_experiencia = :NEW.id_experiencia;
+
+    IF inscripciones_experiencia >= cupos_experiencia THEN
+        DBMS_OUTPUT.PUT_LINE('No hay cupos disponibles para esa experiencia.');
+        RAISE_APPLICATION_ERROR(-20001, 'No hay cupos disponibles para esa experiencia.');
+    END IF;
+END;
+/
