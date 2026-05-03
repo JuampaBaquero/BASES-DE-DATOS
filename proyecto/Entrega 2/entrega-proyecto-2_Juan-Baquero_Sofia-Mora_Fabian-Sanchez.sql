@@ -639,9 +639,7 @@ SELECT
     INNER JOIN CIUDAD ci ON ci.ID_CIUDAD = e.ID_CIUDAD
     INNER JOIN PAIS p ON p.ID_PAIS = ci.ID_PAIS
 
-    ORDER BY 
-        "País" DESC, 
-        "Ciudad" DESC;
+    ORDER BY "País" DESC, "Ciudad" DESC;
 
 --2: Muestra los clientes con mayor número de inscripciones
 SELECT 
