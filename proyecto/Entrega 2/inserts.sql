@@ -149,13 +149,13 @@ INSERT INTO servicio (nombre, descripcion, costo_adicional) VALUES ('Coca Cola b
 INSERT INTO servicio (nombre, descripcion, costo_adicional) VALUES ('Foto Mundialista',     'Tomate fotos en estadios favoritos y con jugadores legendarios',    95000);
 
 -- 11. IMPUESTOXSERVICIO
-INSERT INTO impuestoxservicio (id_impuesto, id_servicio) VALUES (1001, (SELECT id_servicio FROM servicio WHERE nombre = 'Aire acondicionado'));
-INSERT INTO impuestoxservicio (id_impuesto, id_servicio) VALUES (1002, (SELECT id_servicio FROM servicio WHERE nombre = 'Desayuno colombiano'));
-INSERT INTO impuestoxservicio (id_impuesto, id_servicio) VALUES (1001, (SELECT id_servicio FROM servicio WHERE nombre = 'Transporte'));
-INSERT INTO impuestoxservicio (id_impuesto, id_servicio) VALUES (1001, (SELECT id_servicio FROM servicio WHERE nombre = 'Habitacion de Lujo'));
-INSERT INTO impuestoxservicio (id_impuesto, id_servicio) VALUES (1004, (SELECT id_servicio FROM servicio WHERE nombre = 'Coca Cola barra libre'));
-INSERT INTO impuestoxservicio (id_impuesto, id_servicio) VALUES (1005, (SELECT id_servicio FROM servicio WHERE nombre = 'Coca Cola barra libre'));
-INSERT INTO impuestoxservicio (id_impuesto, id_servicio) VALUES (1001, (SELECT id_servicio FROM servicio WHERE nombre = 'Foto Mundialista'));
+INSERT INTO impuestoxservicio (id_impuesto, id_servicio) VALUES (100, (SELECT id_servicio FROM servicio WHERE nombre = 'Aire acondicionado'));
+INSERT INTO impuestoxservicio (id_impuesto, id_servicio) VALUES (200, (SELECT id_servicio FROM servicio WHERE nombre = 'Desayuno colombiano'));
+INSERT INTO impuestoxservicio (id_impuesto, id_servicio) VALUES (300, (SELECT id_servicio FROM servicio WHERE nombre = 'Transporte'));
+INSERT INTO impuestoxservicio (id_impuesto, id_servicio) VALUES (400, (SELECT id_servicio FROM servicio WHERE nombre = 'Habitacion de Lujo'));
+INSERT INTO impuestoxservicio (id_impuesto, id_servicio) VALUES (100, (SELECT id_servicio FROM servicio WHERE nombre = 'Coca Cola barra libre'));
+INSERT INTO impuestoxservicio (id_impuesto, id_servicio) VALUES (200, (SELECT id_servicio FROM servicio WHERE nombre = 'Coca Cola barra libre'));
+INSERT INTO impuestoxservicio (id_impuesto, id_servicio) VALUES (300, (SELECT id_servicio FROM servicio WHERE nombre = 'Foto Mundialista'));
 
 -- 12. SERVICIOSXINSCRIPCION
 -- Exp 1 (sudamericanos)
@@ -198,7 +198,7 @@ INSERT INTO partido (id_estadio, fecha, fase, id_seleccion_local, id_seleccion_v
             TO_DATE('11/06/2026','DD/MM/YYYY'), 'GRUPOS',
             (SELECT id_seleccion FROM seleccion WHERE nombre_seleccion = 'MEXICO'),
             (SELECT id_seleccion FROM seleccion WHERE nombre_seleccion = 'BRASIL'),
-            3, NULL);
+            3, 0, (SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%- mex%'));
 
 INSERT INTO partido (id_estadio, fecha, fase, id_seleccion_local, id_seleccion_visitante, goles_local, goles_visitante, id_experiencia)
     VALUES ((SELECT id_estadio FROM estadio WHERE nombre_estadio = 'Estadio Santiago Bernabeu'),
@@ -219,7 +219,7 @@ INSERT INTO partido (id_estadio, fecha, fase, id_seleccion_local, id_seleccion_v
             TO_DATE('14/06/2026','DD/MM/YYYY'), 'GRUPOS',
             (SELECT id_seleccion FROM seleccion WHERE nombre_seleccion = 'JAPON'),
             (SELECT id_seleccion FROM seleccion WHERE nombre_seleccion = 'COREA DEL SUR'),
-            1, (SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%Japan National%'));
+            1, 0, (SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%Japan National%'));
 
 -- Partido EUA (query 6)
 INSERT INTO partido (id_estadio, fecha, fase, id_seleccion_local, id_seleccion_visitante, goles_local, goles_visitante, id_experiencia)
@@ -227,7 +227,7 @@ INSERT INTO partido (id_estadio, fecha, fase, id_seleccion_local, id_seleccion_v
             TO_DATE('15/06/2026','DD/MM/YYYY'), 'GRUPOS',
             (SELECT id_seleccion FROM seleccion WHERE nombre_seleccion = 'ESTADOS UNIDOS'),
             (SELECT id_seleccion FROM seleccion WHERE nombre_seleccion = 'CANADA'),
-            1, NULL);
+            1, 0, (SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%- eeuu%'));
 
 -- Partido Canada (query 6)
 INSERT INTO partido (id_estadio, fecha, fase, id_seleccion_local, id_seleccion_visitante, goles_local, goles_visitante, id_experiencia)
@@ -235,7 +235,7 @@ INSERT INTO partido (id_estadio, fecha, fase, id_seleccion_local, id_seleccion_v
             TO_DATE('16/06/2026','DD/MM/YYYY'), 'GRUPOS',
             (SELECT id_seleccion FROM seleccion WHERE nombre_seleccion = 'CANADA'),
             (SELECT id_seleccion FROM seleccion WHERE nombre_seleccion = 'AUSTRALIA'),
-            2, 1, NULL);
+            2, 1, (SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%- can%'));
 
 -- Partido Colombia vs Portugal (query 7)
 INSERT INTO partido (id_estadio, fecha, fase, id_seleccion_local, id_seleccion_visitante, goles_local, goles_visitante, id_experiencia)
@@ -284,6 +284,27 @@ INSERT INTO partido (id_estadio, fecha, fase, id_seleccion_local, id_seleccion_v
             (SELECT id_seleccion FROM seleccion WHERE nombre_seleccion = 'ESPANA'),
             2, 1, (SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%Grand Tour%'));
 
+-- GrupOS
+INSERT INTO partido (id_estadio, fecha, fase, id_seleccion_local, id_seleccion_visitante, goles_local, goles_visitante, id_experiencia)
+    VALUES ((SELECT id_estadio FROM estadio WHERE nombre_estadio = 'Estadio Azteca'),
+            TO_DATE('10/06/2027','DD/MM/YYYY'), 'GRUPOS',
+            (SELECT id_seleccion FROM seleccion WHERE nombre_seleccion = 'MEXICO'),
+            (SELECT id_seleccion FROM seleccion WHERE nombre_seleccion = 'COLOMBIA'),
+            2, 1, (SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%- mex%'));
+
+INSERT INTO partido (id_estadio, fecha, fase, id_seleccion_local, id_seleccion_visitante, goles_local, goles_visitante, id_experiencia)
+    VALUES ((SELECT id_estadio FROM estadio WHERE nombre_estadio = 'BMO Field'),
+            TO_DATE('11/06/2027','DD/MM/YYYY'), 'GRUPOS',
+            (SELECT id_seleccion FROM seleccion WHERE nombre_seleccion = 'CANADA'),
+            (SELECT id_seleccion FROM seleccion WHERE nombre_seleccion = 'COLOMBIA'),
+            3, 1, (SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%- can%'));
+
+INSERT INTO partido (id_estadio, fecha, fase, id_seleccion_local, id_seleccion_visitante, goles_local, goles_visitante, id_experiencia)
+    VALUES ((SELECT id_estadio FROM estadio WHERE nombre_estadio = 'MetLife Stadium'),
+            TO_DATE('12/06/2027','DD/MM/YYYY'), 'GRUPOS',
+            (SELECT id_seleccion FROM seleccion WHERE nombre_seleccion = 'ESTADOS UNIDOS'),
+            (SELECT id_seleccion FROM seleccion WHERE nombre_seleccion = 'COLOMBIA'),
+            1, 1, (SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%- eeuu%'));
 -- 14. CLIENTE
 INSERT INTO cliente (nombre, apellido, tipo_documento, numero_telefono, email) VALUES ('Juan',      'Perez',     'CC', 3191122880, 'juan.perez@gmail.com');
 INSERT INTO cliente (nombre, apellido, tipo_documento, numero_telefono, email) VALUES ('Maria',     'Gomez',     'CC', 3102244556, 'maria.gomez@gmail.com');
@@ -317,6 +338,15 @@ INSERT INTO inscripcion (id_experiencia, id_cliente) VALUES ((SELECT id_experien
 INSERT INTO inscripcion (id_experiencia, id_cliente) VALUES ((SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%Azteca%'),         (SELECT id_cliente FROM cliente WHERE email = 'valentina.castro@gmail.com'));
 INSERT INTO inscripcion (id_experiencia, id_cliente) VALUES ((SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%Oceania%'),        (SELECT id_cliente FROM cliente WHERE email = 'sebastian.morales@gmail.com'));
 INSERT INTO inscripcion (id_experiencia, id_cliente) VALUES ((SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%Grand Tour%'),     (SELECT id_cliente FROM cliente WHERE email = 'sofia.mora@gmail.com'));
+INSERT INTO inscripcion (id_experiencia, id_cliente) VALUES ((SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%- mex%'),     (SELECT id_cliente FROM cliente WHERE email = 'sofia.mora@gmail.com'));
+INSERT INTO inscripcion (id_experiencia, id_cliente) VALUES ((SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%- mex%'),     (SELECT id_cliente FROM cliente WHERE email = 'sebastian.morales@gmail.com'));
+INSERT INTO inscripcion (id_experiencia, id_cliente) VALUES ((SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%- mex%'),     (SELECT id_cliente FROM cliente WHERE email = 'laura.martinez@gmail.com'));
+INSERT INTO inscripcion (id_experiencia, id_cliente) VALUES ((SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%- can%'),     (SELECT id_cliente FROM cliente WHERE email = 'sofia.mora@gmail.com'));
+INSERT INTO inscripcion (id_experiencia, id_cliente) VALUES ((SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%- can%'),     (SELECT id_cliente FROM cliente WHERE email = 'sebastian.morales@gmail.com'));
+INSERT INTO inscripcion (id_experiencia, id_cliente) VALUES ((SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%- can%'),     (SELECT id_cliente FROM cliente WHERE email = 'laura.martinez@gmail.com'));
+INSERT INTO inscripcion (id_experiencia, id_cliente) VALUES ((SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%- eeuu%'),     (SELECT id_cliente FROM cliente WHERE email = 'sofia.mora@gmail.com'));
+INSERT INTO inscripcion (id_experiencia, id_cliente) VALUES ((SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%- eeuu%'),     (SELECT id_cliente FROM cliente WHERE email = 'sebastian.morales@gmail.com'));
+INSERT INTO inscripcion (id_experiencia, id_cliente) VALUES ((SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%- eeuu%'),     (SELECT id_cliente FROM cliente WHERE email = 'laura.martinez@gmail.com'));
 
 -- 17. PAGOS
 INSERT INTO pagos (id_cliente, id_experiencia, id_transaccion) VALUES ((SELECT id_cliente FROM cliente WHERE email = 'juan.perez@gmail.com'),       (SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%sudamericanos%'), 5001);

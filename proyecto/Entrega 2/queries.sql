@@ -87,7 +87,7 @@ ORDER BY "ID experiencia";
 
 SELECT 
     p.nombre_pais "País sede",
-    NVL(SUM(PRECIO_TOTAL(i.id_experiencia)), 0) AS "Ganancias generadas"
+    SUM(NVL(PRECIO_TOTAL(i.id_experiencia), 0)) AS "Ganancias generadas"
 FROM pais p
 LEFT JOIN ciudad c ON c.id_pais = p.id_pais
 LEFT JOIN estadio e ON e.id_ciudad = c.id_ciudad
@@ -96,24 +96,6 @@ LEFT JOIN experiencia ex ON pa.id_experiencia = ex.id_experiencia
 LEFT JOIN inscripcion i ON i.id_experiencia = ex.id_experiencia 
 WHERE p.nombre_pais IN ('MEXICO', 'CANADA', 'ESTADOS UNIDOS')
 GROUP BY p.nombre_pais;
-
---Query de diagnóstico para ver si si hay partidos en esas sedes
-SELECT 
-    p.NOMBRE_PAIS,
-    c.NOMBRE_CIUDAD,
-    e.NOMBRE_ESTADIO,
-    sl.NOMBRE_SELECCION,
-    sv.NOMBRE_SELECCION,
-    ex.id_experiencia
-FROM pais p
-LEFT JOIN ciudad c ON c.id_pais = p.id_pais
-LEFT JOIN estadio e ON e.id_ciudad = c.id_ciudad
-LEFT JOIN partido pa ON pa.id_estadio = e.id_estadio
-LEFT JOIN seleccion sv ON sv.id_seleccion = pa.id_seleccion_visitante
-LEFT JOIN seleccion sl ON sl.id_seleccion = pa.id_seleccion_local
-LEFT JOIN experiencia ex ON pa.id_experiencia = ex.id_experiencia
-LEFT JOIN inscripcion i ON i.id_experiencia = ex.id_experiencia
-WHERE p.nombre_pais IN ('MEXICO', 'CANADA', 'ESTADOS UNIDOS');
 
 
 --7: Experiencias vendidas para Colombia - Portugal y ventas
