@@ -90,42 +90,55 @@ INSERT INTO guia (nombre, guia_jefe, id_nivel) VALUES ('Pibe Valderrama',(SELECT
 INSERT INTO guia (nombre, guia_jefe, id_nivel) VALUES ('Michael Jackson',(SELECT id_guia FROM guia WHERE nombre = 'Diego Maradona'), 'INTERMEDIO');
 
 -- 8. EXPERIENCIA
-INSERT INTO experiencia (cupos, descripcion, estado, precio_base, id_guia, precio_total, horas_trabajadas)
+--Experiencias de canadá, méxico y EEUU
+INSERT INTO experiencia (cupos, descripcion, estado, precio_base, id_guia, horas_trabajadas)
+    VALUES (2, 'Inicio del mundial - mex',
+            'disponible', 5000, (SELECT id_guia FROM guia WHERE nombre = 'Mr. Bean'), 8);
+
+INSERT INTO experiencia (cupos, descripcion, estado, precio_base, id_guia, horas_trabajadas)
+    VALUES (1, 'Inicio del mundial - can',
+            'disponible', 7000, (SELECT id_guia FROM guia WHERE nombre = 'Michael Jackson'), 999);
+
+INSERT INTO experiencia (cupos, descripcion, estado, precio_base, id_guia, horas_trabajadas)
+    VALUES (2, 'Inicio del mundial - eeuu',
+            'disponible', 15000, (SELECT id_guia FROM guia WHERE nombre = 'Pibe Valderrama'), 2);
+------------------------------------------------------------------------------------------------------------
+
+INSERT INTO experiencia (cupos, descripcion, estado, precio_base, id_guia, horas_trabajadas)
     VALUES (50, 'Tour estadios sudamericanos con acceso VIP a camerinos en Lima y Bogota',
-            'disponible', 100000, (SELECT id_guia FROM guia WHERE nombre = 'Diego Maradona'), 0, 8);
+            'disponible', 100000, (SELECT id_guia FROM guia WHERE nombre = 'Diego Maradona'), 8);
 
-INSERT INTO experiencia (cupos, descripcion, estado, precio_base, id_guia, precio_total, horas_trabajadas)
+INSERT INTO experiencia (cupos, descripcion, estado, precio_base, id_guia, horas_trabajadas)
     VALUES (50, 'Experiencia premium Europa: Bernabeu y Parc des Princes con cena incluida',
-            'agotada', 250000, (SELECT id_guia FROM guia WHERE nombre = 'Ibai Llanos'), 0, 12);
+            'agotada', 250000, (SELECT id_guia FROM guia WHERE nombre = 'Ibai Llanos'), 12);
 
-INSERT INTO experiencia (cupos, descripcion, estado, precio_base, id_guia, precio_total, horas_trabajadas)
+INSERT INTO experiencia (cupos, descripcion, estado, precio_base, id_guia, horas_trabajadas)
     VALUES (50, 'Aventura Asia: Japan National Stadium y Seoul World Cup Stadium',
-            'disponible', 1, (SELECT id_guia FROM guia WHERE nombre = 'Mr. Bean'), 0, 10);
+            'disponible', 10000, (SELECT id_guia FROM guia WHERE nombre = 'Mr. Bean'), 10);
 
-INSERT INTO experiencia (cupos, descripcion, estado, precio_base, id_guia, precio_total, horas_trabajadas)
+INSERT INTO experiencia (cupos, descripcion, estado, precio_base, id_guia, horas_trabajadas)
     VALUES (50, 'Ruta del Azteca: historia y magia del estadio mas grande de America',
-            'agotada', 199900, (SELECT id_guia FROM guia WHERE nombre = 'Pibe Valderrama'), 0, 6);
+            'agotada', 199900, (SELECT id_guia FROM guia WHERE nombre = 'Pibe Valderrama'), 6);
 
-INSERT INTO experiencia (cupos, descripcion, estado, precio_base, id_guia, precio_total, horas_trabajadas)
+INSERT INTO experiencia (cupos, descripcion, estado, precio_base, id_guia, horas_trabajadas)
     VALUES (50, 'Oceania Xperience: Stadium Australia y tour mundialista por Canberra',
-            'disponible', 125000, (SELECT id_guia FROM guia WHERE nombre = 'Jackie Chan'), 0, 7);
+            'disponible', 125000, (SELECT id_guia FROM guia WHERE nombre = 'Jackie Chan'), 7);
 
-INSERT INTO experiencia (cupos, descripcion, estado, precio_base, id_guia, precio_total, horas_trabajadas)
+INSERT INTO experiencia (cupos, descripcion, estado, precio_base, id_guia, horas_trabajadas)
     VALUES (50, 'Grand Tour Mundial: Europa y Asia con acceso a 4 estadios emblematicos',
-            'cancelada', 367000, (SELECT id_guia FROM guia WHERE nombre = 'Michael Jackson'), 0, 15);
+            'cancelada', 367000, (SELECT id_guia FROM guia WHERE nombre = 'Michael Jackson'), 15);
 
-INSERT INTO experiencia (cupos, descripcion, estado, precio_base, id_guia, precio_total, horas_trabajadas)
+INSERT INTO experiencia (cupos, descripcion, estado, precio_base, id_guia, horas_trabajadas)
     VALUES (50, 'El Campin Experience: vive en vivo el duelo Colombia vs Portugal',
-            'disponible', 175000, (SELECT id_guia FROM guia WHERE nombre = 'Pibe Valderrama'), 0, 9);
+            'disponible', 175000, (SELECT id_guia FROM guia WHERE nombre = 'Pibe Valderrama'), 9);
 
 -- 9. IMPUESTO
 -- NUMBER(1,4) solo permite 0.0001 a 0.0009
 -- CHECK: tipo_impuesto IN ('IVA','TURISTICO','LOCAL','OTRO')
-INSERT INTO impuesto (id_impuesto, valor, tipo_impuesto) VALUES (1001, 0.0001, 'IVA');
-INSERT INTO impuesto (id_impuesto, valor, tipo_impuesto) VALUES (1002, 0.0002, 'LOCAL');
-INSERT INTO impuesto (id_impuesto, valor, tipo_impuesto) VALUES (1003, 0.0003, 'TURISTICO');
-INSERT INTO impuesto (id_impuesto, valor, tipo_impuesto) VALUES (1004, 0.0004, 'OTRO');
-INSERT INTO impuesto (id_impuesto, valor, tipo_impuesto) VALUES (1005, 0.0005, 'OTRO');
+INSERT INTO impuesto (id_impuesto, valor, tipo_impuesto) VALUES (100, 0.19, 'IVA');
+INSERT INTO impuesto (id_impuesto, valor, tipo_impuesto) VALUES (200, 0.002, 'LOCAL');
+INSERT INTO impuesto (id_impuesto, valor, tipo_impuesto) VALUES (300, 0.007, 'TURISTICO');
+INSERT INTO impuesto (id_impuesto, valor, tipo_impuesto) VALUES (400, 0.009, 'OTRO');
 
 -- 10. SERVICIO
 INSERT INTO servicio (nombre, descripcion, costo_adicional) VALUES ('Aire acondicionado',   'Climatizacion premium en zona VIP durante todo el partido',         8000);
@@ -185,7 +198,7 @@ INSERT INTO partido (id_estadio, fecha, fase, id_seleccion_local, id_seleccion_v
             TO_DATE('11/06/2026','DD/MM/YYYY'), 'GRUPOS',
             (SELECT id_seleccion FROM seleccion WHERE nombre_seleccion = 'MEXICO'),
             (SELECT id_seleccion FROM seleccion WHERE nombre_seleccion = 'BRASIL'),
-            3, 0, NULL);
+            3, NULL);
 
 INSERT INTO partido (id_estadio, fecha, fase, id_seleccion_local, id_seleccion_visitante, goles_local, goles_visitante, id_experiencia)
     VALUES ((SELECT id_estadio FROM estadio WHERE nombre_estadio = 'Estadio Santiago Bernabeu'),
@@ -206,7 +219,7 @@ INSERT INTO partido (id_estadio, fecha, fase, id_seleccion_local, id_seleccion_v
             TO_DATE('14/06/2026','DD/MM/YYYY'), 'GRUPOS',
             (SELECT id_seleccion FROM seleccion WHERE nombre_seleccion = 'JAPON'),
             (SELECT id_seleccion FROM seleccion WHERE nombre_seleccion = 'COREA DEL SUR'),
-            1, 0, (SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%Japan National%'));
+            1, (SELECT id_experiencia FROM experiencia WHERE descripcion LIKE '%Japan National%'));
 
 -- Partido EUA (query 6)
 INSERT INTO partido (id_estadio, fecha, fase, id_seleccion_local, id_seleccion_visitante, goles_local, goles_visitante, id_experiencia)
@@ -214,7 +227,7 @@ INSERT INTO partido (id_estadio, fecha, fase, id_seleccion_local, id_seleccion_v
             TO_DATE('15/06/2026','DD/MM/YYYY'), 'GRUPOS',
             (SELECT id_seleccion FROM seleccion WHERE nombre_seleccion = 'ESTADOS UNIDOS'),
             (SELECT id_seleccion FROM seleccion WHERE nombre_seleccion = 'CANADA'),
-            1, 0, NULL);
+            1, NULL);
 
 -- Partido Canada (query 6)
 INSERT INTO partido (id_estadio, fecha, fase, id_seleccion_local, id_seleccion_visitante, goles_local, goles_visitante, id_experiencia)

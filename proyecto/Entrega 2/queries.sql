@@ -1,5 +1,4 @@
 --QUERIES 
-
 --1: Mostrar las experiencias disponibles por ciudad, estadio o partido
 SELECT 
     p.nombre_pais "País",
@@ -23,7 +22,8 @@ SELECT
 
 FROM INSCRIPCION i
 INNER JOIN CLIENTE c ON c.id_cliente = i.id_cliente
-GROUP BY c.nombre;
+GROUP BY c.nombre
+ORDER BY "Número de inscripciones" DESC;
 
 --3: Muestra los ingresos generados por guía en las experiencias
 
@@ -33,7 +33,7 @@ FROM GUIA g
 INNER JOIN nivel n ON g.ID_NIVEL = n.ID_NIVEL
 INNER JOIN EXPERIENCIA e ON g.ID_GUIA = e.ID_EXPERIENCIA
 GROUP BY g.ID_GUIA, g.NOMBRE
-ORDER BY "Ingresos por guía" ASC; 
+ORDER BY "Ingresos por guía" DESC; 
 
 --4: Calcula impuestos asociados a las inscripciones
 CREATE OR REPLACE FUNCTION PRECIO_TOTAL(id_busqueda NUMBER)
@@ -66,11 +66,13 @@ END PRECIO_TOTAL;
 /
 
 SELECT 
-    c.nombre "Nombre",
-    i.id_experiencia "ID experiencia",
-    ROUND(PRECIO_TOTAL(i.id_experiencia), 2) AS "Precio con impuestos"
-FROM CLIENTE c
-INNER JOIN inscripcion i ON i.id_cliente = c.id_cliente;
+    e.id_experiencia "ID experiencia",
+    e.descripcion "Descripción",
+    e.PRECIO_BASE "Precio base",
+    ROUND(PRECIO_TOTAL(e.id_experiencia), 2) AS "Precio con impuestos"
+FROM EXPERIENCIA e
+ORDER BY "ID experiencia";
+
 
 --5: experiencias más demandadas durantre el mundial
 
@@ -85,15 +87,34 @@ INNER JOIN inscripcion i ON i.id_cliente = c.id_cliente;
 
 SELECT 
     p.nombre_pais "País sede",
-    SUM(PRECIO_TOTAL(i.id_experiencia)) AS "Ganancias generadas (con impuestos)"
+    NVL(SUM(PRECIO_TOTAL(i.id_experiencia)), 0) AS "Ganancias generadas"
 FROM pais p
-INNER JOIN ciudad c ON c.id_pais = p.id_pais
-INNER JOIN estadio e ON e.id_ciudad = c.id_ciudad
-INNER JOIN partido pa ON pa.id_estadio = e.id_estadio
-INNER JOIN experiencia ex ON pa.id_experiencia = ex.id_experiencia
-INNER JOIN inscripcion i ON i.id_experiencia = ex.id_experiencia 
-WHERE p.nombre_pais IN ('México', 'Canadá', 'EE.UU.')
+LEFT JOIN ciudad c ON c.id_pais = p.id_pais
+LEFT JOIN estadio e ON e.id_ciudad = c.id_ciudad
+LEFT JOIN partido pa ON pa.id_estadio = e.id_estadio
+LEFT JOIN experiencia ex ON pa.id_experiencia = ex.id_experiencia
+LEFT JOIN inscripcion i ON i.id_experiencia = ex.id_experiencia 
+WHERE p.nombre_pais IN ('MEXICO', 'CANADA', 'ESTADOS UNIDOS')
 GROUP BY p.nombre_pais;
+
+--Query de diagnóstico para ver si si hay partidos en esas sedes
+SELECT 
+    p.NOMBRE_PAIS,
+    c.NOMBRE_CIUDAD,
+    e.NOMBRE_ESTADIO,
+    sl.NOMBRE_SELECCION,
+    sv.NOMBRE_SELECCION,
+    ex.id_experiencia
+FROM pais p
+LEFT JOIN ciudad c ON c.id_pais = p.id_pais
+LEFT JOIN estadio e ON e.id_ciudad = c.id_ciudad
+LEFT JOIN partido pa ON pa.id_estadio = e.id_estadio
+LEFT JOIN seleccion sv ON sv.id_seleccion = pa.id_seleccion_visitante
+LEFT JOIN seleccion sl ON sl.id_seleccion = pa.id_seleccion_local
+LEFT JOIN experiencia ex ON pa.id_experiencia = ex.id_experiencia
+LEFT JOIN inscripcion i ON i.id_experiencia = ex.id_experiencia
+WHERE p.nombre_pais IN ('MEXICO', 'CANADA', 'ESTADOS UNIDOS');
+
 
 --7: Experiencias vendidas para Colombia - Portugal y ventas
 
@@ -106,6 +127,6 @@ INNER JOIN partido pa ON pa.id_experiencia = ex.id_experiencia
 INNER JOIN seleccion sl ON pa.id_seleccion_local = sl.id_seleccion
 INNER JOIN seleccion sv ON pa.id_seleccion_visitante = sv.id_seleccion
 LEFT JOIN inscripcion i ON i.id_experiencia = ex.id_experiencia
-WHERE sl.nombre_seleccion = 'Portugal' 
-  AND sv.nombre_seleccion = 'Colombia'
+WHERE sl.nombre_seleccion = 'COLOMBIA' 
+  AND sv.nombre_seleccion = 'PORTUGAL'
 GROUP BY ex.id_experiencia, ex.cupos;

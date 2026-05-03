@@ -64,7 +64,6 @@ CREATE TABLE experiencia (
   estado VARCHAR2(15),
   precio_base NUMBER(12,4),
   id_guia NUMBER(10,0) NOT NULL,
-  precio_total NUMBER(12,4) DEFAULT 0,
   horas_trabajadas INTEGER
 );
 
@@ -96,7 +95,7 @@ CREATE TABLE servicio (
 
 CREATE TABLE impuesto (
   id_impuesto NUMBER(10,0) PRIMARY KEY,
-  valor NUMBER(1,4),
+  valor NUMBER(5,2),
   tipo_impuesto VARCHAR2(20)
 );
 
