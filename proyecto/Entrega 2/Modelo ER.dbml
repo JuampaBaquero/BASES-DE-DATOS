@@ -84,12 +84,16 @@ Table impuesto {
   tipo_impuesto VARCHAR2(20)
 }
 
+<<<<<<< HEAD
 Table impuestoxservicio {
   id_impuesto NUMBER(10, 0) [pk, ref: > impuesto.id_impuesto]
   id_servicio NUMBER(10, 0) [pk, ref: > servicio.id_servicio]
 }
 
 Table cliente {
+=======
+Table Cliente{
+>>>>>>> cde6337f81e593d556c9291e185bac989dede311
   nombre VARCHAR2(30)
   apellido VARCHAR2(30)
   tipo_documento VARCHAR2(2)
