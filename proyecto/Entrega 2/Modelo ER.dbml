@@ -80,7 +80,7 @@ Table servicio {
 
 Table impuesto {
   id_impuesto NUMBER(10, 0) [pk]
-  valor NUMBER(0, 4)
+  valor NUMBER(5, 2)
   tipo_impuesto VARCHAR2(20)
 }
 
